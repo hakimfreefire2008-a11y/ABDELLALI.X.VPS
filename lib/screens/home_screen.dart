@@ -7,6 +7,7 @@ import 'v2ray_screen.dart';
 import 'udp_screen.dart';
 import 'slowdns_screen.dart';
 import 'hc_files_screen.dart';
+import 'help_screen.dart';
 
 
 
@@ -16,14 +17,14 @@ class HomeScreen extends StatefulWidget {
 
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() =>
+      _HomeScreenState();
 
 }
 
 
 
 class _HomeScreenState extends State<HomeScreen> {
-
 
 
   bool loading = false;
@@ -40,7 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
 
+
     await ServerService.loadServers();
+
 
 
     setState(() {
@@ -50,12 +53,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
 
+
   }
+
 
 
 
   @override
   Widget build(BuildContext context) {
+
+
+
+    final total =
+        ServerService.servers.length;
+
 
 
     final online =
@@ -64,23 +75,20 @@ class _HomeScreenState extends State<HomeScreen> {
             .length;
 
 
-    final total =
-        ServerService.servers.length;
 
+    final pages = [
 
-
-    final items = [
 
 
       {
-        "title": "SSH Servers",
+        "title": "SSH SERVERS",
         "icon": Icons.terminal,
         "page": const SshScreen(),
       },
 
 
       {
-        "title": "V2Ray VLESS / VMESS / TROJAN",
+        "title": "V2RAY VLESS VMESS TROJAN",
         "icon": Icons.security,
         "page": const V2RayScreen(),
       },
@@ -107,6 +115,13 @@ class _HomeScreenState extends State<HomeScreen> {
       },
 
 
+      {
+        "title": "HELP & DEVELOPER",
+        "icon": Icons.support_agent,
+        "page": const HelpScreen(),
+      },
+
+
     ];
 
 
@@ -114,79 +129,55 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
 
 
+
       appBar: AppBar(
 
 
-        title: const Text(
+        title:
+
+        const Text(
+
           "CONFIGES ABDELLALI PRO",
+
         ),
 
 
         centerTitle: true,
 
 
+
         actions: [
+
 
 
           IconButton(
 
-            onPressed: loading
-                ? null
-                : refreshServers,
+
+            onPressed:
+            loading ? null : refreshServers,
 
 
-            icon: loading
+            icon:
 
-                ? const CircularProgressIndicator()
+            loading
 
-                : const Icon(
-                    Icons.refresh,
-                  ),
+                ? const SizedBox(
 
-          ),
+              width:20,
 
+              height:20,
 
-        ],
+              child:
+              CircularProgressIndicator(),
 
-
-      ),
-
+            )
 
 
-      body: Column(
+                :
 
+            const Icon(
 
-        children: [
-
-
-          Card(
-
-
-            margin:
-            const EdgeInsets.all(16),
-
-
-            child: ListTile(
-
-
-              leading:
-              const Icon(
-                Icons.cloud_done,
-                size: 35,
-              ),
-
-
-              title:
-              Text(
-                "Servers Online: $online / $total",
-              ),
-
-
-              subtitle:
-              const Text(
-                "Updated from server",
-              ),
-
+              Icons.refresh,
 
             ),
 
@@ -194,22 +185,104 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
 
+        ],
+
+
+
+      ),
+
+
+
+
+
+      body: Column(
+
+
+
+        children: [
+
+
+
+          Card(
+
+
+
+            margin:
+
+            const EdgeInsets.all(16),
+
+
+
+            child: ListTile(
+
+
+
+              leading:
+
+              const Icon(
+
+                Icons.cloud_done,
+
+                size: 40,
+
+              ),
+
+
+
+              title:
+
+              Text(
+
+                "ONLINE $online / $total",
+
+              ),
+
+
+
+              subtitle:
+
+              const Text(
+
+                "Server Status",
+
+              ),
+
+
+
+            ),
+
+
+
+          ),
+
+
+
+
 
           Expanded(
+
 
 
             child: ListView.builder(
 
 
+
               padding:
+
               const EdgeInsets.all(16),
 
 
+
               itemCount:
-              items.length,
+
+              pages.length,
+
+
+
 
 
               itemBuilder:
+
                   (context,index){
 
 
@@ -217,14 +290,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Card(
 
 
+
+                  elevation: 3,
+
+
+
                   child: ListTile(
 
 
+
                     leading:
+
                     Icon(
 
-                      items[index]["icon"]
-                          as IconData,
+                      pages[index]["icon"]
+
+                      as IconData,
 
                       size: 35,
 
@@ -232,66 +313,114 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
+
+
                     title:
+
                     Text(
 
-                      items[index]["title"]
-                          as String,
+                      pages[index]["title"]
+
+                      as String,
+
+
+
+                      style:
+
+                      const TextStyle(
+
+                        fontWeight:
+
+                        FontWeight.bold,
+
+                      ),
+
+
 
                     ),
+
+
 
 
 
                     trailing:
+
                     const Icon(
+
                       Icons.arrow_forward_ios,
+
                     ),
 
 
 
-                    onTap: (){
+
+
+                    onTap: () {
+
 
 
                       Navigator.push(
 
+
+
                         context,
+
+
 
                         MaterialPageRoute(
 
+
+
                           builder: (_) =>
-                          items[index]["page"]
-                              as Widget,
+
+                          pages[index]["page"]
+
+                          as Widget,
+
+
 
                         ),
 
+
+
                       );
+
 
 
                     },
 
 
+
                   ),
+
 
 
                 );
 
 
+
               },
+
 
 
             ),
 
 
+
           ),
+
 
 
         ],
 
 
+
       ),
 
 
+
     );
+
 
 
   }

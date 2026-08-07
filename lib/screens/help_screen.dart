@@ -5,26 +5,25 @@ import 'package:url_launcher/url_launcher.dart';
 
 class HelpScreen extends StatelessWidget {
 
-
   const HelpScreen({super.key});
 
 
 
-  Future<void> openLink(String url) async {
+  Future<void> openUrl(String link) async {
+
+    final uri = Uri.parse(link);
 
 
-    final uri = Uri.parse(url);
+    if(await canLaunchUrl(uri)) {
 
-
-    if(await canLaunchUrl(uri)){
-
-      await launchUrl(uri);
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
 
     }
 
-
   }
-
 
 
 
@@ -37,9 +36,8 @@ class HelpScreen extends StatelessWidget {
 
       appBar: AppBar(
 
-        title:
-        const Text(
-          "About Developer",
+        title: const Text(
+          "HELP & DEVELOPER",
         ),
 
         centerTitle: true,
@@ -48,12 +46,11 @@ class HelpScreen extends StatelessWidget {
 
 
 
-      body:
-      Center(
+
+      body: Center(
 
 
-        child:
-        Padding(
+        child: SingleChildScrollView(
 
 
           padding:
@@ -61,8 +58,7 @@ class HelpScreen extends StatelessWidget {
 
 
 
-          child:
-          Column(
+          child: Column(
 
 
             mainAxisAlignment:
@@ -82,7 +78,7 @@ class HelpScreen extends StatelessWidget {
 
 
                 decoration:
-                const BoxDecoration(
+                BoxDecoration(
 
 
                   shape:
@@ -90,7 +86,7 @@ class HelpScreen extends StatelessWidget {
 
 
                   gradient:
-                  LinearGradient(
+                  const LinearGradient(
 
                     colors: [
 
@@ -101,6 +97,27 @@ class HelpScreen extends StatelessWidget {
                     ],
 
                   ),
+
+
+
+                  boxShadow: [
+
+
+                    BoxShadow(
+
+                      color:
+                      Colors.blueAccent,
+
+                      blurRadius:
+                      30,
+
+                      spreadRadius:
+                      5,
+
+                    ),
+
+
+                  ],
 
 
                 ),
@@ -114,6 +131,7 @@ class HelpScreen extends StatelessWidget {
                   "ABDE",
 
 
+
                   style:
                   TextStyle(
 
@@ -123,7 +141,7 @@ class HelpScreen extends StatelessWidget {
 
 
                     fontSize:
-                    40,
+                    45,
 
 
                     fontWeight:
@@ -141,7 +159,47 @@ class HelpScreen extends StatelessWidget {
 
 
 
-              const SizedBox(height: 25),
+              const SizedBox(height:25),
+
+
+
+
+
+              const Text(
+
+
+                "💗𝗔𝗕𝗗𝗘𝗟𝗟𝗔𝗟𝗜💗",
+
+
+
+                style:
+                TextStyle(
+
+
+                  fontSize:
+                  26,
+
+
+                  fontWeight:
+                  FontWeight.w900,
+
+
+                  color:
+                  Colors.blueAccent,
+
+
+                ),
+
+
+
+              ),
+
+
+
+
+
+              const SizedBox(height:10),
+
 
 
 
@@ -152,12 +210,13 @@ class HelpScreen extends StatelessWidget {
                 "CONFIGES ABDELLALI PRO",
 
 
+
                 style:
                 TextStyle(
 
 
                   fontSize:
-                  22,
+                  18,
 
 
                   fontWeight:
@@ -167,12 +226,153 @@ class HelpScreen extends StatelessWidget {
                 ),
 
 
+
               ),
 
 
 
 
-              const SizedBox(height: 10),
+              const SizedBox(height:30),
+
+
+
+
+              Card(
+
+
+                child:
+                ListTile(
+
+
+                  leading:
+                  const Icon(
+                    Icons.phone,
+                  ),
+
+
+                  title:
+                  const Text(
+                    "WhatsApp Developer",
+                  ),
+
+
+                  subtitle:
+                  const Text(
+                    "+212714193084",
+                  ),
+
+
+                  onTap: () {
+
+
+                    openUrl(
+                      "https://wa.me/212714193084",
+                    );
+
+
+                  },
+
+
+                ),
+
+
+              ),
+
+
+
+
+
+              Card(
+
+
+                child:
+                ListTile(
+
+
+                  leading:
+                  const Icon(
+                    Icons.telegram,
+                  ),
+
+
+                  title:
+                  const Text(
+                    "Telegram",
+                  ),
+
+
+                  subtitle:
+                  const Text(
+                    "t.me/abdellali84",
+                  ),
+
+
+                  onTap: () {
+
+
+                    openUrl(
+                      "https://t.me/abdellali84",
+                    );
+
+
+                  },
+
+
+                ),
+
+
+              ),
+
+
+
+
+
+              Card(
+
+
+                child:
+                ListTile(
+
+
+                  leading:
+                  const Icon(
+                    Icons.campaign,
+                  ),
+
+
+                  title:
+                  const Text(
+                    "WhatsApp Channel",
+                  ),
+
+
+                  subtitle:
+                  const Text(
+                    "ABDELLALI CHANNEL",
+                  ),
+
+
+                  onTap: () {
+
+
+                    openUrl(
+                      "https://whatsapp.com/channel/0029VbBJN2RFcow7OykfP02I",
+                    );
+
+
+                  },
+
+
+                ),
+
+
+              ),
+
+
+
+
+
+              const SizedBox(height:20),
 
 
 
@@ -180,93 +380,28 @@ class HelpScreen extends StatelessWidget {
               const Text(
 
 
-                "Version 1.0.0",
+                "Version 1.0.0\nFAST • SECURE • CONFIGS",
+
+
+
+                textAlign:
+                TextAlign.center,
+
 
 
                 style:
                 TextStyle(
 
+
                   color:
                   Colors.white70,
 
+
                 ),
 
-              ),
-
-
-
-
-              const SizedBox(height: 30),
-
-
-
-
-              FilledButton.icon(
-
-
-                onPressed: (){
-
-
-                  openLink(
-                    "https://wa.me/212000000000",
-                  );
-
-
-                },
-
-
-                icon:
-                const Icon(
-                  Icons.chat,
-                ),
-
-
-                label:
-                const Text(
-                  "WhatsApp Developer",
-                ),
 
 
               ),
-
-
-
-
-
-              const SizedBox(height: 15),
-
-
-
-
-
-              OutlinedButton.icon(
-
-
-                onPressed: (){
-
-
-                  openLink(
-                    "https://t.me/username",
-                  );
-
-
-                },
-
-
-                icon:
-                const Icon(
-                  Icons.telegram,
-                ),
-
-
-                label:
-                const Text(
-                  "Telegram Channel",
-                ),
-
-
-              ),
-
 
 
 
