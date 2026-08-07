@@ -24,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
 
 
+
   late AnimationController controller;
 
   late Animation<double> animation;
@@ -63,6 +64,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
 
+
   Future<void> startApp() async {
 
 
@@ -78,6 +80,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     if(mounted){
 
+
       Navigator.pushReplacement(
 
         context,
@@ -90,6 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
         ),
 
       );
+
 
     }
 
@@ -107,6 +111,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
 
   }
+
 
 
 
@@ -142,14 +147,16 @@ class _SplashScreenState extends State<SplashScreen>
 
             ],
 
+
             begin: Alignment.topCenter,
 
             end: Alignment.bottomCenter,
 
+
           ),
 
-        ),
 
+        ),
 
 
 
@@ -157,6 +164,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
           opacity: animation,
+
 
 
           child: Center(
@@ -178,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
                   padding:
-                  const EdgeInsets.all(25),
+                  const EdgeInsets.all(20),
 
 
 
@@ -188,6 +196,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                     shape:
                     BoxShape.circle,
+
 
 
                     gradient:
@@ -201,6 +210,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                       ],
 
+
                     ),
 
 
@@ -211,7 +221,7 @@ class _SplashScreenState extends State<SplashScreen>
                       BoxShadow(
 
                         color:
-                        Colors.blue,
+                        Colors.blueAccent,
 
                         blurRadius:
                         35,
@@ -234,6 +244,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
                     "ABDE",
+
 
 
                     style:
@@ -262,6 +273,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
 
 
+
                 ),
 
 
@@ -282,6 +294,7 @@ class _SplashScreenState extends State<SplashScreen>
                   "CONFIGES",
 
 
+
                   style:
                   TextStyle(
 
@@ -299,22 +312,25 @@ class _SplashScreenState extends State<SplashScreen>
 
 
                     letterSpacing:
-                    6,
+                    5,
 
 
                   ),
 
 
+
                 ),
+
 
 
 
 
                 const SizedBox(
 
-                  height: 5,
+                  height: 8,
 
                 ),
+
 
 
 
@@ -323,6 +339,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
                   "ABDELLALI PRO",
+
 
 
                   style:
@@ -348,6 +365,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
 
 
+
                 ),
 
 
@@ -366,6 +384,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
                   "FAST • SECURE • CONFIGS",
+
 
 
                   style:
@@ -403,10 +422,8 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const CircularProgressIndicator(
 
-
                   color:
                   Colors.white,
-
 
                 ),
 
