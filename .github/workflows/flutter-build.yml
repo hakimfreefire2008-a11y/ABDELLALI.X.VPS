@@ -17,41 +17,72 @@ jobs:
 
     steps:
 
-      - name: Checkout source
+
+      - name: Checkout
         uses: actions/checkout@v4
+
 
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.32.0"
+
+          flutter-version: "3.35.0"
+
           channel: stable
+
           cache: true
+
 
 
       - name: Flutter doctor
         run: flutter doctor -v
 
 
-      - name: Get dependencies
-        run: flutter pub get
 
-
-      - name: Create Android project
+      - name: Create clean Flutter Android project
         run: |
-          if [ ! -d "android" ]; then
-            flutter create --platforms android .
+
+          mkdir temp_project
+
+          cd temp_project
+
+          flutter create .
+
+          cd ..
+
+
+
+      - name: Copy source files
+        run: |
+
+          cp -r lib temp_project/
+
+          cp pubspec.yaml temp_project/
+
+          if [ -d assets ]; then
+            cp -r assets temp_project/
           fi
 
 
+
+      - name: Install packages
+        working-directory: temp_project
+        run: flutter pub get
+
+
+
       - name: Build APK
+        working-directory: temp_project
         run: flutter build apk --release
+
 
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
+
         with:
 
           name: CONFIGES-ABDELLALI-PRO-APK
 
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: temp_project/build/app/outputs/flutter-apk/app-release.apk
