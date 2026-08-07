@@ -1,49 +1,45 @@
 import '../models/server.dart';
+import 'api_service.dart';
 
 
 class ServerService {
 
 
-static List<Server> servers = [
+  static List<Server> servers = [];
 
 
-Server(
-
-name: "Morocco SSH 1",
-country: "🇲🇦 Morocco",
-type: "SSH",
-host: "ssh.example.com",
-ping: 45,
-online: true,
-
-),
+  static Future<void> loadServers() async {
 
 
-Server(
-
-name: "Germany VLESS",
-country: "🇩🇪 Germany",
-type: "VLESS",
-host: "de.example.com",
-ping: 80,
-online: true,
-
-),
+    try {
 
 
-Server(
-
-name: "UDP Fast",
-country: "🇺🇸 USA",
-type: "UDP",
-host: "udp.example.com",
-ping: 60,
-online: false,
-
-),
+      servers = await ApiService.getServers();
 
 
-];
+    } catch (e) {
+
+
+      servers = [];
+
+
+    }
+
+
+  }
+
+
+  static List<Server> getByType(String type) {
+
+
+    return servers
+        .where(
+          (server) => server.type == type,
+        )
+        .toList();
+
+
+  }
 
 
 }
