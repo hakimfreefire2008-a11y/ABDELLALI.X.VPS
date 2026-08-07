@@ -1,14 +1,14 @@
-name: Build CONFIGES ABDELLALI PRO APK
+name: Setup CONFIGES ABDELLALI PRO
 
 on:
   workflow_dispatch:
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout project
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Flutter
@@ -16,19 +16,16 @@ jobs:
         with:
           flutter-version: '3.32.0'
           channel: stable
-          cache: true
 
-      - name: Create Android platform
-        run: flutter create --platforms android .
+      - name: Create Flutter Project
+        run: |
+          flutter create .
+          flutter pub get
 
-      - name: Get Flutter packages
-        run: flutter pub get
-
-      - name: Build Release APK
-        run: flutter build apk --release
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: CONFIGES-ABDELLALI-PRO-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Commit Android Files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add android ios web windows linux macos
+          git commit -m "Add Flutter platform files" || echo "No changes"
+          git push
