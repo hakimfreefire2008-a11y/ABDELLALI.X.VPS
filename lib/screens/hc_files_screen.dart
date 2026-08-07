@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../services/abde_file_service.dart';
 import '../services/action_service.dart';
+import '../services/download_service.dart';
 
 
 class HcFilesScreen extends StatelessWidget {
@@ -20,13 +22,11 @@ class HcFilesScreen extends StatelessWidget {
         "country": "🇲🇦 Morocco",
       },
 
-
       {
         "name": "orange.abde",
         "type": "SLOW DNS",
         "country": "🇲🇦 Morocco",
       },
-
 
       {
         "name": "germany-vless.abde",
@@ -34,9 +34,7 @@ class HcFilesScreen extends StatelessWidget {
         "country": "🇩🇪 Germany",
       },
 
-
     ];
-
 
 
     return Scaffold(
@@ -48,7 +46,6 @@ class HcFilesScreen extends StatelessWidget {
         ),
 
       ),
-
 
 
       body: ListView.builder(
@@ -64,7 +61,6 @@ class HcFilesScreen extends StatelessWidget {
           final file = files[index];
 
 
-
           return Card(
 
             child: Padding(
@@ -75,7 +71,7 @@ class HcFilesScreen extends StatelessWidget {
               child: Column(
 
                 crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                CrossAxisAlignment.start,
 
 
                 children: [
@@ -87,7 +83,7 @@ class HcFilesScreen extends StatelessWidget {
 
 
                       const Icon(
-                        Icons.insert_drive_file,
+                        Icons.file_present,
                         size: 35,
                       ),
 
@@ -102,7 +98,7 @@ class HcFilesScreen extends StatelessWidget {
                         child: Column(
 
                           crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          CrossAxisAlignment.start,
 
 
                           children: [
@@ -125,7 +121,6 @@ class HcFilesScreen extends StatelessWidget {
                             ),
 
 
-
                             Text(
 
                               "${file["country"]} | ${file["type"]}",
@@ -139,21 +134,22 @@ class HcFilesScreen extends StatelessWidget {
 
                       ),
 
-
                     ],
 
                   ),
 
 
+                  const SizedBox(
+                    height: 15,
+                  ),
 
-                  const SizedBox(height: 15),
 
 
+                  Wrap(
 
-                  Row(
+                    spacing: 10,
 
                     children: [
-
 
 
                       FilledButton.icon(
@@ -162,10 +158,9 @@ class HcFilesScreen extends StatelessWidget {
 
 
                           final content =
-                              await AbdeFileService.loadFile(
-                                file["name"]!,
-                              );
-
+                          await AbdeFileService.loadFile(
+                            file["name"]!,
+                          );
 
 
                           if(context.mounted){
@@ -180,13 +175,13 @@ class HcFilesScreen extends StatelessWidget {
 
                                 return AlertDialog(
 
-
                                   title: Text(
                                     file["name"]!,
                                   ),
 
 
-                                  content: SingleChildScrollView(
+                                  content:
+                                  SingleChildScrollView(
 
                                     child: Text(
                                       content,
@@ -206,6 +201,7 @@ class HcFilesScreen extends StatelessWidget {
 
                                       },
 
+
                                       child:
                                       const Text(
                                         "CLOSE",
@@ -215,7 +211,6 @@ class HcFilesScreen extends StatelessWidget {
 
 
                                   ],
-
 
                                 );
 
@@ -241,15 +236,7 @@ class HcFilesScreen extends StatelessWidget {
                           "OPEN",
                         ),
 
-
                       ),
-
-
-
-                      const SizedBox(
-                        width: 10,
-                      ),
-
 
 
 
@@ -259,10 +246,9 @@ class HcFilesScreen extends StatelessWidget {
 
 
                           final content =
-                              await AbdeFileService.loadFile(
-                                file["name"]!,
-                              );
-
+                          await AbdeFileService.loadFile(
+                            file["name"]!,
+                          );
 
 
                           ActionService.shareConfig(
@@ -284,6 +270,63 @@ class HcFilesScreen extends StatelessWidget {
                           "SHARE",
                         ),
 
+                      ),
+
+
+
+
+                      OutlinedButton.icon(
+
+                        onPressed: () async {
+
+
+                          final content =
+                          await AbdeFileService.loadFile(
+                            file["name"]!,
+                          );
+
+
+                          final path =
+                          await DownloadService.saveFile(
+
+                            file["name"]!,
+
+                            content,
+
+                          );
+
+
+                          if(context.mounted){
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(
+
+                              SnackBar(
+
+                                content: Text(
+                                  "Saved: $path",
+                                ),
+
+                              ),
+
+                            );
+
+                          }
+
+
+                        },
+
+
+                        icon:
+                        const Icon(
+                          Icons.download,
+                        ),
+
+
+                        label:
+                        const Text(
+                          "DOWNLOAD",
+                        ),
 
                       ),
 
@@ -292,7 +335,6 @@ class HcFilesScreen extends StatelessWidget {
                     ],
 
                   ),
-
 
 
                 ],
