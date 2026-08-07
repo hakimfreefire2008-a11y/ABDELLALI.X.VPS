@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/server_service.dart';
+import '../services/action_service.dart';
 
 
 class UdpScreen extends StatelessWidget {
@@ -36,37 +37,153 @@ class UdpScreen extends StatelessWidget {
           final server = servers[index];
 
 
+          final config =
+              "TYPE: ${server.type}\n"
+              "HOST: ${server.host}\n"
+              "COUNTRY: ${server.country}\n"
+              "PING: ${server.ping} ms";
+
+
           return Card(
 
-            child: ListTile(
+            child: Padding(
 
-              leading: Text(
-                server.country,
-                style: const TextStyle(
-                  fontSize: 25,
-                ),
-              ),
+              padding: const EdgeInsets.all(12),
 
+              child: Column(
 
-              title: Text(
-                server.name,
-              ),
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
 
 
-              subtitle: Text(
-                "${server.host}\nPing: ${server.ping} ms",
-              ),
+                children: [
 
 
-              trailing: Icon(
+                  Text(
 
-                server.online
-                    ? Icons.check_circle
-                    : Icons.cancel,
+                    "${server.country} ${server.name}",
 
-                color: server.online
-                    ? Colors.green
-                    : Colors.red,
+                    style: const TextStyle(
+
+                      fontSize: 18,
+
+                      fontWeight: FontWeight.bold,
+
+                    ),
+
+                  ),
+
+
+                  const SizedBox(height: 8),
+
+
+                  Text(
+                    server.host,
+                  ),
+
+
+                  Text(
+                    "Ping: ${server.ping} ms",
+                  ),
+
+
+                  const SizedBox(height: 5),
+
+
+                  Row(
+
+                    children: [
+
+
+                      Icon(
+
+                        server.online
+                            ? Icons.check_circle
+                            : Icons.cancel,
+
+                        color: server.online
+                            ? Colors.green
+                            : Colors.red,
+
+                      ),
+
+
+                      const SizedBox(width: 5),
+
+
+                      Text(
+
+                        server.online
+                            ? "ONLINE"
+                            : "OFFLINE",
+
+                      ),
+
+
+                    ],
+
+                  ),
+
+
+                  const SizedBox(height: 12),
+
+
+                  Row(
+
+                    children: [
+
+
+                      FilledButton.icon(
+
+                        onPressed: (){
+
+                          ActionService.copyConfig(
+                            config,
+                          );
+
+                        },
+
+                        icon: const Icon(
+                          Icons.copy,
+                        ),
+
+                        label: const Text(
+                          "COPY",
+                        ),
+
+                      ),
+
+
+                      const SizedBox(width: 10),
+
+
+                      OutlinedButton.icon(
+
+                        onPressed: (){
+
+                          ActionService.shareConfig(
+                            config,
+                          );
+
+                        },
+
+                        icon: const Icon(
+                          Icons.share,
+                        ),
+
+                        label: const Text(
+                          "SHARE",
+                        ),
+
+                      ),
+
+
+                    ],
+
+                  ),
+
+
+                ],
 
               ),
 
