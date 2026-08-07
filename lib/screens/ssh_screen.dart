@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/server_service.dart';
+
 
 class SshScreen extends StatelessWidget {
 
@@ -8,6 +10,12 @@ class SshScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
+    final servers = ServerService.servers
+        .where((s) => s.type == "SSH")
+        .toList();
+
+
     return Scaffold(
 
       appBar: AppBar(
@@ -15,15 +23,59 @@ class SshScreen extends StatelessWidget {
       ),
 
 
-      body: const Center(
+      body: ListView.builder(
 
-        child: Text(
-          "SSH CONFIGS",
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        padding: const EdgeInsets.all(16),
+
+        itemCount: servers.length,
+
+
+        itemBuilder: (context,index){
+
+
+          final server = servers[index];
+
+
+          return Card(
+
+            child: ListTile(
+
+              leading: Text(
+                server.country,
+                style: const TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+
+
+              title: Text(
+                server.name,
+              ),
+
+
+              subtitle: Text(
+                "${server.host}\nPing: ${server.ping} ms",
+              ),
+
+
+              trailing: Icon(
+
+                server.online
+                    ? Icons.check_circle
+                    : Icons.cancel,
+
+                color: server.online
+                    ? Colors.green
+                    : Colors.red,
+
+              ),
+
+            ),
+
+          );
+
+
+        },
 
       ),
 
