@@ -1,0 +1,35 @@
+{
+  "servers": [
+
+    {
+      "name": "Morocco SSH 01",
+      "type": "SSH",
+      "country": "🇲🇦 Morocco",
+      "host": "ssh.example.com",
+      "port": "22",
+      "ping": 50,
+      "online": true
+    },
+
+    {
+      "name": "Germany VLESS",
+      "type": "VLESS",
+      "country": "🇩🇪 Germany",
+      "host": "vless.example.com",
+      "port": "443",
+      "ping": 80,
+      "online": true
+    },
+
+    {
+      "name": "UDP Custom",
+      "type": "UDP",
+      "country": "🇲🇦 Morocco",
+      "host": "udp.example.com",
+      "port": "7300",
+      "ping": 60,
+      "online": true
+    }
+
+  ]
+}
