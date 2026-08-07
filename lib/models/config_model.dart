@@ -1,6 +1,5 @@
 class ConfigModel {
 
-
   final String id;
 
   final String name;
@@ -30,6 +29,11 @@ class ConfigModel {
   final String nsDomain;
   final String publicKey;
   final String dnsIp;
+
+
+  final bool isActive;
+  final bool isFavorite;
+
 
   final DateTime createdAt;
 
@@ -66,6 +70,12 @@ class ConfigModel {
     required this.nsDomain,
     required this.publicKey,
     required this.dnsIp,
+
+
+    this.isActive = true,
+
+    this.isFavorite = false,
+
 
     required this.createdAt,
 
@@ -107,6 +117,12 @@ class ConfigModel {
       "publicKey":publicKey,
       "dnsIp":dnsIp,
 
+
+      "isActive":isActive,
+
+      "isFavorite":isFavorite,
+
+
       "createdAt":createdAt.toIso8601String(),
 
     };
@@ -115,69 +131,153 @@ class ConfigModel {
 
 
 
+
   factory ConfigModel.fromJson(
-      Map<String,dynamic> json
-      ){
+      Map<String,dynamic> json){
 
     return ConfigModel(
 
-      id: json["id"] ?? "",
+      id:json["id"] ?? "",
 
-      name: json["name"] ?? "",
+      name:json["name"] ?? "",
 
-      type: json["type"] ?? "",
+      type:json["type"] ?? "",
 
-      note: json["note"] ?? "",
-
-
-      host: json["host"] ?? "",
-
-      port: json["port"] ?? "",
+      note:json["note"] ?? "",
 
 
-      username: json["username"] ?? "",
+      host:json["host"] ?? "",
 
-      password: json["password"] ?? "",
-
-
-      useSni: json["useSni"] ?? false,
-
-      sni: json["sni"] ?? "",
+      port:json["port"] ?? "",
 
 
-      usePayload: json["usePayload"] ?? false,
+      username:json["username"] ?? "",
 
-      payload: json["payload"] ?? "",
-
-
-      useProxy: json["useProxy"] ?? false,
-
-      proxyHost: json["proxyHost"] ?? "",
-
-      proxyPort: json["proxyPort"] ?? "",
+      password:json["password"] ?? "",
 
 
-      v2rayType: json["v2rayType"] ?? "",
+      useSni:json["useSni"] ?? false,
 
-      uuid: json["uuid"] ?? "",
-
-      address: json["address"] ?? "",
+      sni:json["sni"] ?? "",
 
 
-      nsDomain: json["nsDomain"] ?? "",
+      usePayload:json["usePayload"] ?? false,
 
-      publicKey: json["publicKey"] ?? "",
+      payload:json["payload"] ?? "",
 
-      dnsIp: json["dnsIp"] ?? "",
+
+      useProxy:json["useProxy"] ?? false,
+
+      proxyHost:json["proxyHost"] ?? "",
+
+      proxyPort:json["proxyPort"] ?? "",
+
+
+      v2rayType:json["v2rayType"] ?? "",
+
+      uuid:json["uuid"] ?? "",
+
+      address:json["address"] ?? "",
+
+
+      nsDomain:json["nsDomain"] ?? "",
+
+      publicKey:json["publicKey"] ?? "",
+
+      dnsIp:json["dnsIp"] ?? "",
+
+
+
+      isActive:json["isActive"] ?? true,
+
+      isFavorite:json["isFavorite"] ?? false,
+
 
 
       createdAt:
       DateTime.tryParse(
           json["createdAt"] ?? ""
       ) ??
-          DateTime.now(),
+      DateTime.now(),
 
     );
+
+  }
+
+
+
+
+
+  ConfigModel copyWith({
+
+    bool? isFavorite,
+
+    bool? isActive,
+
+  }){
+
+
+    return ConfigModel(
+
+      id:id,
+
+      name:name,
+
+      type:type,
+
+      note:note,
+
+
+      host:host,
+
+      port:port,
+
+
+      username:username,
+
+      password:password,
+
+
+      useSni:useSni,
+
+      sni:sni,
+
+
+      usePayload:usePayload,
+
+      payload:payload,
+
+
+      useProxy:useProxy,
+
+      proxyHost:proxyHost,
+
+      proxyPort:proxyPort,
+
+
+      v2rayType:v2rayType,
+
+      uuid:uuid,
+
+      address:address,
+
+
+      nsDomain:nsDomain,
+
+      publicKey:publicKey,
+
+      dnsIp:dnsIp,
+
+
+      isActive:isActive ?? this.isActive,
+
+      isFavorite:isFavorite ?? this.isFavorite,
+
+
+      createdAt:createdAt,
+
+    );
+
 
   }
 
