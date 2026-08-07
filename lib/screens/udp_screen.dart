@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/server_service.dart';
+
 
 class UdpScreen extends StatelessWidget {
 
@@ -8,6 +10,12 @@ class UdpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
+    final servers = ServerService.servers
+        .where((s) => s.type == "UDP")
+        .toList();
+
+
     return Scaffold(
 
       appBar: AppBar(
@@ -15,30 +23,59 @@ class UdpScreen extends StatelessWidget {
       ),
 
 
-      body: ListView(
+      body: ListView.builder(
 
         padding: const EdgeInsets.all(16),
 
-        children: const [
+        itemCount: servers.length,
 
-          Card(
+
+        itemBuilder: (context,index){
+
+
+          final server = servers[index];
+
+
+          return Card(
+
             child: ListTile(
-              leading: Icon(Icons.network_check),
-              title: Text("UDP Config 1"),
-              subtitle: Text("Fast UDP Tunnel"),
+
+              leading: Text(
+                server.country,
+                style: const TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+
+
+              title: Text(
+                server.name,
+              ),
+
+
+              subtitle: Text(
+                "${server.host}\nPing: ${server.ping} ms",
+              ),
+
+
+              trailing: Icon(
+
+                server.online
+                    ? Icons.check_circle
+                    : Icons.cancel,
+
+                color: server.online
+                    ? Colors.green
+                    : Colors.red,
+
+              ),
+
             ),
-          ),
+
+          );
 
 
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.speed),
-              title: Text("UDP Config 2"),
-              subtitle: Text("Low Ping Server"),
-            ),
-          ),
-
-        ],
+        },
 
       ),
 
