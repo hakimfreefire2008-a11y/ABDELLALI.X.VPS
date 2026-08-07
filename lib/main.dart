@@ -43,10 +43,14 @@ class ConfigesApp extends StatelessWidget {
         brightness: Brightness.dark,
 
 
+        useMaterial3: true,
+
+
         colorSchemeSeed: Colors.blue,
 
 
-        useMaterial3: true,
+        scaffoldBackgroundColor:
+        const Color(0xff050505),
 
 
       ),
