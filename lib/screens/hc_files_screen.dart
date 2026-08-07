@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/file_service.dart';
 
 
 class HcFilesScreen extends StatelessWidget {
@@ -13,9 +12,25 @@ class HcFilesScreen extends StatelessWidget {
 
     final files = [
 
-      "Morocco-Free.hc",
-      "SSH-Fast.hc",
-      "UDP-Premium.hc",
+      {
+        "name": "inwi-6.abde",
+        "type": "UDP CUSTOM",
+        "country": "🇲🇦 Morocco",
+      },
+
+
+      {
+        "name": "orange.abde",
+        "type": "SLOW DNS",
+        "country": "🇲🇦 Morocco",
+      },
+
+
+      {
+        "name": "germany-vless.abde",
+        "type": "VLESS",
+        "country": "🇩🇪 Germany",
+      },
 
     ];
 
@@ -23,7 +38,11 @@ class HcFilesScreen extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text("HTTP CUSTOM FILES"),
+
+        title: const Text(
+          "ABDE FILES",
+        ),
+
       ),
 
 
@@ -37,37 +56,57 @@ class HcFilesScreen extends StatelessWidget {
         itemBuilder: (context,index){
 
 
+          final file = files[index];
+
+
           return Card(
 
             child: ListTile(
 
               leading: const Icon(
-                Icons.file_download,
+                Icons.file_open,
               ),
 
 
               title: Text(
-                files[index],
+                file["name"]!,
               ),
 
 
-              trailing: IconButton(
-
-                icon: const Icon(
-                  Icons.download,
-                ),
+              subtitle: Text(
+                "${file["country"]}\n${file["type"]}",
+              ),
 
 
-                onPressed: (){
+              trailing: PopupMenuButton(
 
-                  FileService.downloadFile(
-                    context,
-                    files[index],
-                  );
+                itemBuilder: (context)=>[
 
-                },
+                  const PopupMenuItem(
+
+                    value: "download",
+
+                    child: Text(
+                      "Download",
+                    ),
+
+                  ),
+
+
+                  const PopupMenuItem(
+
+                    value: "share",
+
+                    child: Text(
+                      "Share",
+                    ),
+
+                  ),
+
+                ],
 
               ),
+
 
             ),
 
