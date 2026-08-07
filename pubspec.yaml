@@ -1,5 +1,7 @@
 name: configes_abdellali_pro
+
 description: CONFIGES ABDELLALI PRO
+
 publish_to: "none"
 
 version: 1.0.0+1
@@ -7,6 +9,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
+
 
 
 dependencies:
@@ -17,17 +20,33 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+
+  # API
   http: ^1.2.2
 
+
+  # Open links
   url_launcher: ^6.3.1
 
+
+  # Pick files
   file_picker: ^8.1.2
+
+
+  # Share .abde files
+  share_plus: ^10.0.2
+
+
+  # Encryption
+  crypto: ^3.0.5
+
 
 
 dev_dependencies:
 
   flutter_test:
     sdk: flutter
+
 
   flutter_lints: ^5.0.0
 
@@ -36,3 +55,8 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+
+  assets:
+
+    - assets/images/
