@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../models/config_model.dart';
+import '../services/abde_service.dart';
 
 
 
@@ -14,6 +17,7 @@ class CreateConfigScreen extends StatefulWidget {
       _CreateConfigScreenState();
 
 }
+
 
 
 
@@ -31,86 +35,83 @@ class _CreateConfigScreenState
 
 
   final name =
-  TextEditingController();
+      TextEditingController();
 
 
   final note =
-  TextEditingController();
+      TextEditingController();
 
 
   final host =
-  TextEditingController();
+      TextEditingController();
 
 
   final port =
-  TextEditingController(
-      text: "443"
-  );
+      TextEditingController(text: "443");
 
 
   final username =
-  TextEditingController();
+      TextEditingController();
 
 
   final password =
-  TextEditingController();
+      TextEditingController();
 
 
 
   final sni =
-  TextEditingController();
+      TextEditingController();
 
 
   final payload =
-  TextEditingController();
+      TextEditingController();
+
 
 
   final proxyHost =
-  TextEditingController();
+      TextEditingController();
 
 
   final proxyPort =
-  TextEditingController(
-      text: "8080"
-  );
+      TextEditingController(text: "8080");
 
 
 
   final uuid =
-  TextEditingController();
+      TextEditingController();
 
 
   final address =
-  TextEditingController();
+      TextEditingController();
 
 
 
   final nsDomain =
-  TextEditingController();
+      TextEditingController();
 
 
   final publicKey =
-  TextEditingController();
+      TextEditingController();
 
 
   final dnsIp =
-  TextEditingController(
-      text: "41.214.140.5"
-  );
+      TextEditingController(
+          text: "41.214.140.5"
+      );
 
 
 
 
-
-  void createConfig(){
-
+  Future<void> createConfig() async {
 
 
-    final config =
-    ConfigModel(
+
+    final config = ConfigModel(
 
 
-      name: name.text,
+      name: name.text.isEmpty
+          ? "ABDE CONFIG"
+          : name.text,
 
 
       type: type,
@@ -178,10 +179,28 @@ class _CreateConfigScreenState
 
 
       createdAt:
-      DateTime.now(),
-
+          DateTime.now(),
 
     );
+
+
+
+
+    final dir =
+        Directory.systemTemp;
+
+
+
+    final file =
+        await AbdeService.createFile(
+          config,
+          dir.path,
+        );
+
+
+
+
+    if(!mounted) return;
 
 
 
@@ -189,13 +208,11 @@ class _CreateConfigScreenState
         .showSnackBar(
 
 
-      const SnackBar(
+      SnackBar(
 
-        content:
-        Text(
-          "Config Created Successfully"
+        content: Text(
+            "Created ${file.path}"
         ),
-
 
       ),
 
@@ -203,10 +220,8 @@ class _CreateConfigScreenState
     );
 
 
-    print(config.toJson());
-
-
   }
+
 
 
 
@@ -227,33 +242,28 @@ class _CreateConfigScreenState
 
 
       child:
-      TextField(
 
+      TextField(
 
         controller: controller,
 
-
         decoration:
+
         InputDecoration(
 
-
           labelText:title,
-
 
           border:
           const OutlineInputBorder(),
 
-
         ),
-
 
       ),
 
-
     );
 
-
   }
+
 
 
 
@@ -267,16 +277,14 @@ class _CreateConfigScreenState
     return Scaffold(
 
 
-
       appBar:
-      AppBar(
 
+      AppBar(
 
         title:
         const Text(
             "Create Config"
         ),
-
 
       ),
 
@@ -284,6 +292,7 @@ class _CreateConfigScreenState
 
 
       body:
+
       SingleChildScrollView(
 
 
@@ -291,10 +300,9 @@ class _CreateConfigScreenState
         const EdgeInsets.all(16),
 
 
-
         child:
-        Column(
 
+        Column(
 
 
           children: [
@@ -314,7 +322,8 @@ class _CreateConfigScreenState
 
 
 
-            DropdownButtonFormField(
+
+            DropdownButtonFormField<String>(
 
 
               value:type,
@@ -322,65 +331,63 @@ class _CreateConfigScreenState
 
               items:
 
-
               const [
 
 
                 DropdownMenuItem(
-                  value:"SSH",
-                  child:Text("SSH"),
+                    value:"SSH",
+                    child:Text("SSH")
                 ),
 
 
                 DropdownMenuItem(
-                  value:"VLESS",
-                  child:Text("VLESS"),
+                    value:"VLESS",
+                    child:Text("VLESS")
                 ),
 
 
                 DropdownMenuItem(
-                  value:"VMESS",
-                  child:Text("VMESS"),
+                    value:"VMESS",
+                    child:Text("VMESS")
                 ),
 
 
                 DropdownMenuItem(
-                  value:"TROJAN",
-                  child:Text("TROJAN"),
+                    value:"TROJAN",
+                    child:Text("TROJAN")
                 ),
 
 
                 DropdownMenuItem(
-                  value:"SLOWDNS",
-                  child:Text("SLOW DNS"),
+                    value:"SLOWDNS",
+                    child:Text("SLOW DNS")
                 ),
 
 
                 DropdownMenuItem(
-                  value:"UDP",
-                  child:Text("UDP"),
+                    value:"UDP",
+                    child:Text("UDP")
                 ),
 
 
               ],
 
 
-              onChanged:(v){
+
+              onChanged:(value){
 
 
                 setState((){
 
-
-                  type=v!;
-
+                  type=value!;
 
                 });
 
 
               },
 
-
             ),
+
 
 
 
@@ -388,11 +395,11 @@ class _CreateConfigScreenState
 
 
 
+
             input(
                 "Host",
                 host
             ),
-
 
 
             input(
@@ -420,12 +427,10 @@ class _CreateConfigScreenState
 
             SwitchListTile(
 
-
               title:
               const Text(
                   "Enable SNI"
               ),
-
 
               value:
               useSni,
@@ -433,13 +438,11 @@ class _CreateConfigScreenState
 
               onChanged:(v){
 
-
                 setState((){
 
                   useSni=v;
 
                 });
-
 
               },
 
@@ -459,14 +462,13 @@ class _CreateConfigScreenState
 
 
 
-            SwitchListTile(
 
+            SwitchListTile(
 
               title:
               const Text(
                   "Enable Payload"
               ),
-
 
               value:
               usePayload,
@@ -474,19 +476,16 @@ class _CreateConfigScreenState
 
               onChanged:(v){
 
-
                 setState((){
 
                   usePayload=v;
 
                 });
 
-
               },
 
 
             ),
-
 
 
 
@@ -501,14 +500,13 @@ class _CreateConfigScreenState
 
 
 
-            SwitchListTile(
 
+            SwitchListTile(
 
               title:
               const Text(
                   "Enable Proxy"
               ),
-
 
               value:
               useProxy,
@@ -516,20 +514,16 @@ class _CreateConfigScreenState
 
               onChanged:(v){
 
-
                 setState((){
 
                   useProxy=v;
 
                 });
 
-
               },
 
 
             ),
-
-
 
 
 
@@ -553,10 +547,13 @@ class _CreateConfigScreenState
 
 
 
+
+
             input(
                 "UUID",
                 uuid
             ),
+
 
 
             input(
@@ -573,10 +570,12 @@ class _CreateConfigScreenState
             ),
 
 
+
             input(
                 "Public Key",
                 publicKey
             ),
+
 
 
             input(
@@ -587,7 +586,10 @@ class _CreateConfigScreenState
 
 
 
+
+
             const SizedBox(height:20),
+
 
 
 
@@ -598,20 +600,20 @@ class _CreateConfigScreenState
 
 
               child:
+
               const Text(
                   "CREATE CONFIG"
               ),
 
 
-            ),
+            )
+
 
 
 
           ],
 
-
         ),
-
 
       ),
 
