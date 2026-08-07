@@ -14,7 +14,6 @@ class FileManagerService {
 
   final EncryptionService _encryption = EncryptionService();
 
-  // Get app documents directory
   Future<Directory> _getAppDirectory() async {
     final appDir = await getApplicationDocumentsDirectory();
     final configsDir = Directory('${appDir.path}/configs');
@@ -24,7 +23,6 @@ class FileManagerService {
     return configsDir;
   }
 
-  // Get downloads directory
   Future<Directory?> _getDownloadsDirectory() async {
     if (Platform.isAndroid) {
       final downloads = Directory('/storage/emulated/0/Download');
@@ -35,23 +33,16 @@ class FileManagerService {
     return await getExternalStorageDirectory();
   }
 
-  // Save config as .abde file
   Future<String?> saveConfigAsABDE(ConfigModel config) async {
     try {
       final dir = await _getAppDirectory();
       final fileName = '${config.name.replaceAll(RegExp(r'[^\w\s-]'), '')}.abde';
       final file = File('${dir.path}/$fileName');
 
-      // Convert config to JSON
       final configJson = config.toJson();
-
-      // Encrypt the JSON
       final encrypted = _encryption.encryptConfig(configJson);
-
-      // Generate signature
       final signature = _encryption.generateSignature(encrypted);
 
-      // Create file content with signature
       final fileData = {
         'data': encrypted,
         'signature': signature,
@@ -68,7 +59,6 @@ class FileManagerService {
     }
   }
 
-  // Import .abde file
   Future<ConfigModel?> importABDE(String filePath) async {
     try {
       final file = File(filePath);
@@ -77,7 +67,6 @@ class FileManagerService {
       final content = await file.readAsString();
       final jsonData = json.decode(content) as Map<String, dynamic>;
 
-      // Verify signature
       final encryptedData = jsonData['data'] as String;
       final signature = jsonData['signature'] as String;
 
@@ -85,16 +74,12 @@ class FileManagerService {
         throw Exception('File signature verification failed!');
       }
 
-      // Decrypt data
       final configData = _encryption.decryptConfig(encryptedData);
       if (configData.isEmpty) {
         throw Exception('Failed to decrypt config data');
       }
 
-      // Create config model
       final config = ConfigModel.fromJson(configData);
-
-      // Save to local configs
       await _saveConfigLocal(config);
 
       return config;
@@ -103,7 +88,6 @@ class FileManagerService {
     }
   }
 
-  // Save config locally (encrypted)
   Future<void> _saveConfigLocal(ConfigModel config) async {
     final dir = await _getAppDirectory();
     final fileName = '${config.id}.abde';
@@ -123,7 +107,6 @@ class FileManagerService {
     await file.writeAsString(json.encode(fileData));
   }
 
-  // Load all saved configs
   Future<List<ConfigModel>> loadAllConfigs() async {
     final List<ConfigModel> configs = [];
     try {
@@ -137,7 +120,6 @@ class FileManagerService {
             final jsonData = json.decode(content) as Map<String, dynamic>;
             final encryptedData = jsonData['data'] as String;
 
-            // Decrypt
             final configData = _encryption.decryptConfig(encryptedData);
             if (configData.isNotEmpty) {
               final config = ConfigModel.fromJson(configData);
@@ -152,12 +134,10 @@ class FileManagerService {
       return configs;
     }
 
-    // Sort by createdAt
     configs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return configs;
   }
 
-  // Delete config file
   Future<bool> deleteConfig(String configId) async {
     try {
       final dir = await _getAppDirectory();
@@ -173,7 +153,6 @@ class FileManagerService {
     }
   }
 
-  // Share .abde file
   Future<bool> shareConfig(ConfigModel config) async {
     try {
       final filePath = await saveConfigAsABDE(config);
@@ -192,7 +171,6 @@ class FileManagerService {
     }
   }
 
-  // Export to downloads folder
   Future<bool> exportToDownloads(ConfigModel config) async {
     try {
       final downloadsDir = await _getDownloadsDirectory();
@@ -201,7 +179,6 @@ class FileManagerService {
       final fileName = '${config.name.replaceAll(RegExp(r'[^\w\s-]'), '')}.abde';
       final destFile = File('${downloadsDir.path}/$fileName');
 
-      // Save config
       final sourcePath = await saveConfigAsABDE(config);
       if (sourcePath == null) return false;
 
@@ -214,7 +191,6 @@ class FileManagerService {
     }
   }
 
-  // Check if file is valid .abde
   Future<bool> isValidABDE(String filePath) async {
     try {
       final file = File(filePath);
@@ -237,7 +213,6 @@ class FileManagerService {
     }
   }
 
-  // Get file info
   Future<Map<String, dynamic>?> getFileInfo(String filePath) async {
     try {
       final file = File(filePath);

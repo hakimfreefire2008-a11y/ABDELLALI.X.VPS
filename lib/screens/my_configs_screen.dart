@@ -24,12 +24,6 @@ class _MyConfigsScreenState extends State<MyConfigsScreen> {
     _loadConfigs();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadConfigs();
-  }
-
   Future<void> _loadConfigs() async {
     setState(() {
       _isLoading = true;
@@ -377,7 +371,6 @@ class _MyConfigsScreenState extends State<MyConfigsScreen> {
   }
 
   void _openConfig(ConfigModel config) {
-    // TODO: Open config details/connect
     _showSnackBar('Opening ${config.name}...', Colors.blue);
   }
 

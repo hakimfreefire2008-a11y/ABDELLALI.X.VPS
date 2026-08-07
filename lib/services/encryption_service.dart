@@ -3,128 +3,64 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:pointycastle/export.dart';
-import 'package:flutter/services.dart';
+import 'package:crypto/crypto.dart';
 
 class EncryptionService {
   static final EncryptionService _instance = EncryptionService._internal();
   factory EncryptionService() => _instance;
   EncryptionService._internal();
 
-  static const String _key = 'ABDELLALI_PRO_2026_SECURE_KEY_32_BYTES!!'; // 32 bytes
+  static const String _key = 'ABDELLALI_PRO_2026_SECURE_KEY_32_BYTES!!';
 
-  Uint8List _getKey() {
-    return Uint8List.fromList(utf8.encode(_key));
-  }
+  // Simple XOR encryption (since pointycastle has issues)
+  String _xorEncrypt(String plainText) {
+    List<int> plainBytes = utf8.encode(plainText);
+    List<int> keyBytes = utf8.encode(_key);
+    List<int> encrypted = [];
 
-  Uint8List _getIV() {
-    final random = Random.secure();
-    final iv = Uint8List(16);
-    for (int i = 0; i < 16; i++) {
-      iv[i] = random.nextInt(256);
+    for (int i = 0; i < plainBytes.length; i++) {
+      encrypted.add(plainBytes[i] ^ keyBytes[i % keyBytes.length]);
     }
-    return iv;
+
+    return base64.encode(encrypted);
   }
 
-  // Encrypt data
-  String encrypt(String plainText) {
-    try {
-      final key = _getKey();
-      final iv = _getIV();
-      
-      final cipher = CBCBlockCipher(AESEngine())
-        ..init(true, ParametersWithIV(KeyParameter(key), iv));
-      
-      final plainBytes = utf8.encode(plainText);
-      final paddedBytes = _pad(plainBytes, cipher.blockSize);
-      final encrypted = Uint8List(paddedBytes.length);
-      
-      int offset = 0;
-      while (offset < paddedBytes.length) {
-        offset += cipher.processBlock(paddedBytes, offset, encrypted, offset);
-      }
-      
-      // Combine IV + encrypted data
-      final result = Uint8List(iv.length + encrypted.length)
-        ..setAll(0, iv)
-        ..setAll(iv.length, encrypted);
-      
-      return base64.encode(result);
-    } catch (e) {
-      return plainText;
+  String _xorDecrypt(String cipherText) {
+    List<int> encrypted = base64.decode(cipherText);
+    List<int> keyBytes = utf8.encode(_key);
+    List<int> decrypted = [];
+
+    for (int i = 0; i < encrypted.length; i++) {
+      decrypted.add(encrypted[i] ^ keyBytes[i % keyBytes.length]);
     }
+
+    return utf8.decode(decrypted);
   }
 
-  // Decrypt data
-  String decrypt(String cipherText) {
-    try {
-      final combined = base64.decode(cipherText);
-      
-      // Extract IV
-      final iv = combined.sublist(0, 16);
-      final encrypted = combined.sublist(16);
-      
-      final key = _getKey();
-      final cipher = CBCBlockCipher(AESEngine())
-        ..init(false, ParametersWithIV(KeyParameter(key), iv));
-      
-      final decrypted = Uint8List(encrypted.length);
-      int offset = 0;
-      while (offset < encrypted.length) {
-        offset += cipher.processBlock(encrypted, offset, decrypted, offset);
-      }
-      
-      final unpadded = _unpad(decrypted);
-      return utf8.decode(unpadded);
-    } catch (e) {
-      return cipherText;
-    }
-  }
-
-  // Pad data to block size
-  List<int> _pad(List<int> data, int blockSize) {
-    final padLength = blockSize - (data.length % blockSize);
-    final padded = List<int>.from(data);
-    padded.addAll(List.filled(padLength, padLength));
-    return padded;
-  }
-
-  // Unpad data
-  List<int> _unpad(List<int> data) {
-    if (data.isEmpty) return data;
-    final padLength = data.last;
-    if (padLength < 1 || padLength > data.length) return data;
-    return data.sublist(0, data.length - padLength);
-  }
-
-  // Encrypt config to .abde format
+  // Encrypt config
   String encryptConfig(Map<String, dynamic> configData) {
     final jsonString = json.encode(configData);
-    return encrypt(jsonString);
+    return _xorEncrypt(jsonString);
   }
 
-  // Decrypt config from .abde format
+  // Decrypt config
   Map<String, dynamic> decryptConfig(String encryptedData) {
     try {
-      final jsonString = decrypt(encryptedData);
+      final jsonString = _xorDecrypt(encryptedData);
       return json.decode(jsonString) as Map<String, dynamic>;
     } catch (e) {
       return {};
     }
   }
 
-  // Generate file signature
+  // Generate signature
   String generateSignature(String data) {
-    // Simple signature using hash
     final bytes = utf8.encode(data);
-    final digest = SHA256Digest();
-    final result = Uint8List(digest.digestSize);
-    digest.processBytes(bytes, 0, bytes.length);
-    digest.doFinal(result, 0);
-    return base64.encode(result);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
-  // Verify file signature
+  // Verify signature
   bool verifySignature(String data, String signature) {
     try {
       final computed = generateSignature(data);
@@ -134,11 +70,11 @@ class EncryptionService {
     }
   }
 
-  // Check if data is encrypted (detects AES format)
+  // Check if encrypted
   bool isEncrypted(String data) {
     try {
-      final decoded = base64.decode(data);
-      return decoded.length > 16; // IV(16) + at least 1 byte
+      base64.decode(data);
+      return true;
     } catch (e) {
       return false;
     }

@@ -191,7 +191,6 @@ class _ImportConfigScreenState extends State<ImportConfigScreen> {
         _importedType = null;
       });
 
-      // Open file picker
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['abde'],
@@ -212,7 +211,6 @@ class _ImportConfigScreenState extends State<ImportConfigScreen> {
         return;
       }
 
-      // Check if valid .abde
       final isValid = await _fileManager.isValidABDE(filePath);
       if (!isValid) {
         setState(() {
@@ -222,7 +220,6 @@ class _ImportConfigScreenState extends State<ImportConfigScreen> {
         return;
       }
 
-      // Import the config
       final config = await _fileManager.importABDE(filePath);
       if (config == null) {
         setState(() {
