@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout project
         uses: actions/checkout@v4
 
       - name: Setup Flutter
@@ -16,14 +16,15 @@ jobs:
         with:
           flutter-version: '3.32.0'
           channel: stable
+          cache: true
 
-      - name: Create Flutter Android project
+      - name: Create Android platform
         run: flutter create --platforms android .
 
-      - name: Get packages
+      - name: Get Flutter packages
         run: flutter pub get
 
-      - name: Build APK
+      - name: Build Release APK
         run: flutter build apk --release
 
       - name: Upload APK
