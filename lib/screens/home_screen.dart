@@ -1,41 +1,55 @@
 import 'package:flutter/material.dart';
 
+import 'ssh_screen.dart';
+import 'v2ray_screen.dart';
+import 'udp_screen.dart';
+import 'slowdns_screen.dart';
+import 'hc_files_screen.dart';
+
+
 class HomeScreen extends StatelessWidget {
+
   const HomeScreen({super.key});
-
-
-  final List<Map<String, dynamic>> services = const [
-
-    {
-      "name": "SSH Servers",
-      "icon": Icons.terminal,
-    },
-
-    {
-      "name": "V2Ray VLESS / VMESS / TROJAN",
-      "icon": Icons.security,
-    },
-
-    {
-      "name": "UDP CUSTOM",
-      "icon": Icons.network_check,
-    },
-
-    {
-      "name": "SLOW DNS",
-      "icon": Icons.dns,
-    },
-
-    {
-      "name": "HTTP CUSTOM FILES",
-      "icon": Icons.file_download,
-    },
-
-  ];
 
 
   @override
   Widget build(BuildContext context) {
+
+
+    final items = [
+
+      {
+        "title": "SSH Servers",
+        "icon": Icons.terminal,
+        "page": const SshScreen(),
+      },
+
+      {
+        "title": "V2Ray VLESS / VMESS / TROJAN",
+        "icon": Icons.security,
+        "page": const V2RayScreen(),
+      },
+
+      {
+        "title": "UDP CUSTOM",
+        "icon": Icons.network_check,
+        "page": const UdpScreen(),
+      },
+
+      {
+        "title": "SLOW DNS",
+        "icon": Icons.dns,
+        "page": const SlowDnsScreen(),
+      },
+
+      {
+        "title": "HTTP CUSTOM FILES",
+        "icon": Icons.file_download,
+        "page": const HcFilesScreen(),
+      },
+
+    ];
+
 
     return Scaffold(
 
@@ -51,23 +65,24 @@ class HomeScreen extends StatelessWidget {
 
         padding: const EdgeInsets.all(16),
 
-        itemCount: services.length,
+        itemCount: items.length,
 
 
         itemBuilder: (context,index){
+
 
           return Card(
 
             child: ListTile(
 
               leading: Icon(
-                services[index]["icon"],
+                items[index]["icon"] as IconData,
                 size: 35,
               ),
 
 
               title: Text(
-                services[index]["name"],
+                items[index]["title"] as String,
               ),
 
 
@@ -76,11 +91,28 @@ class HomeScreen extends StatelessWidget {
               ),
 
 
-              onTap: () {},
+              onTap: () {
+
+                Navigator.push(
+
+                  context,
+
+                  MaterialPageRoute(
+
+                    builder: (_) =>
+                        items[index]["page"] as Widget,
+
+                  ),
+
+                );
+
+              },
+
 
             ),
 
           );
+
 
         },
 
@@ -89,4 +121,5 @@ class HomeScreen extends StatelessWidget {
     );
 
   }
+
 }
