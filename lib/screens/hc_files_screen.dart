@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/abde_file_service.dart';
+import '../services/action_service.dart';
 
 
 class HcFilesScreen extends StatelessWidget {
@@ -32,7 +34,9 @@ class HcFilesScreen extends StatelessWidget {
         "country": "🇩🇪 Germany",
       },
 
+
     ];
+
 
 
     return Scaffold(
@@ -44,6 +48,7 @@ class HcFilesScreen extends StatelessWidget {
         ),
 
       ),
+
 
 
       body: ListView.builder(
@@ -59,54 +64,240 @@ class HcFilesScreen extends StatelessWidget {
           final file = files[index];
 
 
+
           return Card(
 
-            child: ListTile(
+            child: Padding(
 
-              leading: const Icon(
-                Icons.file_open,
-              ),
+              padding: const EdgeInsets.all(12),
 
 
-              title: Text(
-                file["name"]!,
-              ),
+              child: Column(
+
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
 
 
-              subtitle: Text(
-                "${file["country"]}\n${file["type"]}",
-              ),
+                children: [
 
 
-              trailing: PopupMenuButton(
+                  Row(
 
-                itemBuilder: (context)=>[
+                    children: [
 
-                  const PopupMenuItem(
 
-                    value: "download",
+                      const Icon(
+                        Icons.insert_drive_file,
+                        size: 35,
+                      ),
 
-                    child: Text(
-                      "Download",
-                    ),
+
+                      const SizedBox(
+                        width: 10,
+                      ),
+
+
+                      Expanded(
+
+                        child: Column(
+
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+
+
+                          children: [
+
+
+                            Text(
+
+                              file["name"]!,
+
+                              style:
+                              const TextStyle(
+
+                                fontSize: 18,
+
+                                fontWeight:
+                                FontWeight.bold,
+
+                              ),
+
+                            ),
+
+
+
+                            Text(
+
+                              "${file["country"]} | ${file["type"]}",
+
+                            ),
+
+
+                          ],
+
+                        ),
+
+                      ),
+
+
+                    ],
 
                   ),
 
 
-                  const PopupMenuItem(
 
-                    value: "share",
+                  const SizedBox(height: 15),
 
-                    child: Text(
-                      "Share",
-                    ),
+
+
+                  Row(
+
+                    children: [
+
+
+
+                      FilledButton.icon(
+
+                        onPressed: () async {
+
+
+                          final content =
+                              await AbdeFileService.loadFile(
+                                file["name"]!,
+                              );
+
+
+
+                          if(context.mounted){
+
+                            showDialog(
+
+                              context: context,
+
+
+                              builder: (context){
+
+
+                                return AlertDialog(
+
+
+                                  title: Text(
+                                    file["name"]!,
+                                  ),
+
+
+                                  content: SingleChildScrollView(
+
+                                    child: Text(
+                                      content,
+                                    ),
+
+                                  ),
+
+
+                                  actions: [
+
+
+                                    TextButton(
+
+                                      onPressed: (){
+
+                                        Navigator.pop(context);
+
+                                      },
+
+                                      child:
+                                      const Text(
+                                        "CLOSE",
+                                      ),
+
+                                    )
+
+
+                                  ],
+
+
+                                );
+
+
+                              },
+
+                            );
+
+                          }
+
+
+                        },
+
+
+                        icon:
+                        const Icon(
+                          Icons.open_in_new,
+                        ),
+
+
+                        label:
+                        const Text(
+                          "OPEN",
+                        ),
+
+
+                      ),
+
+
+
+                      const SizedBox(
+                        width: 10,
+                      ),
+
+
+
+
+                      OutlinedButton.icon(
+
+                        onPressed: () async {
+
+
+                          final content =
+                              await AbdeFileService.loadFile(
+                                file["name"]!,
+                              );
+
+
+
+                          ActionService.shareConfig(
+                            content,
+                          );
+
+
+                        },
+
+
+                        icon:
+                        const Icon(
+                          Icons.share,
+                        ),
+
+
+                        label:
+                        const Text(
+                          "SHARE",
+                        ),
+
+
+                      ),
+
+
+
+                    ],
 
                   ),
+
+
 
                 ],
 
               ),
-
 
             ),
 
