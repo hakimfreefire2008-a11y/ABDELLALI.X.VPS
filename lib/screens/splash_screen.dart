@@ -24,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
 
 
-
   late AnimationController controller;
 
   late Animation<double> animation;
@@ -50,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
 
       parent: controller,
 
-      curve: Curves.easeIn,
+      curve: Curves.easeOut,
 
     );
 
@@ -59,7 +58,6 @@ class _SplashScreenState extends State<SplashScreen>
 
 
     startApp();
-
 
   }
 
@@ -73,10 +71,9 @@ class _SplashScreenState extends State<SplashScreen>
 
     await Future.delayed(
 
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
 
     );
-
 
 
     if(mounted){
@@ -101,6 +98,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
 
+
   @override
   void dispose(){
 
@@ -120,107 +118,304 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
 
 
-      body: Center(
+      body: Container(
+
+
+        width: double.infinity,
+
+        height: double.infinity,
+
+
+
+        decoration: const BoxDecoration(
+
+
+          gradient: LinearGradient(
+
+            colors: [
+
+              Color(0xff020024),
+
+              Color(0xff090979),
+
+              Color(0xff00D4FF),
+
+            ],
+
+            begin: Alignment.topCenter,
+
+            end: Alignment.bottomCenter,
+
+          ),
+
+        ),
+
+
 
 
         child: FadeTransition(
 
+
           opacity: animation,
 
 
-          child: Column(
+          child: Center(
 
 
-            mainAxisAlignment:
-            MainAxisAlignment.center,
+            child: Column(
 
 
-            children: [
+              mainAxisAlignment:
+              MainAxisAlignment.center,
 
 
-              Container(
 
-                width: 130,
-
-                height: 130,
+              children: [
 
 
-                decoration:
-                BoxDecoration(
 
-                  shape:
-                  BoxShape.circle,
+                Container(
 
 
-                  color:
-                  Colors.blue,
-
-                ),
+                  padding:
+                  const EdgeInsets.all(25),
 
 
-                child:
-                const Center(
 
-                  child: Text(
+                  decoration:
+                  BoxDecoration(
+
+
+                    shape:
+                    BoxShape.circle,
+
+
+                    gradient:
+                    const LinearGradient(
+
+                      colors: [
+
+                        Colors.blue,
+
+                        Colors.purple,
+
+                      ],
+
+                    ),
+
+
+
+                    boxShadow: [
+
+
+                      BoxShadow(
+
+                        color:
+                        Colors.blue,
+
+                        blurRadius:
+                        35,
+
+                        spreadRadius:
+                        5,
+
+                      ),
+
+
+                    ],
+
+
+                  ),
+
+
+
+                  child:
+                  const Text(
+
 
                     "ABDE",
+
 
                     style:
                     TextStyle(
 
-                      fontSize: 45,
-
-                      fontWeight:
-                      FontWeight.bold,
 
                       color:
                       Colors.white,
 
+
+                      fontSize:
+                      45,
+
+
+                      fontWeight:
+                      FontWeight.w900,
+
+
+                      letterSpacing:
+                      5,
+
+
                     ),
+
 
                   ),
 
-                ),
-
-              ),
-
-
-
-              const SizedBox(
-                height: 25,
-              ),
-
-
-
-              const Text(
-
-                "CONFIGES ABDELLALI PRO",
-
-                style:
-                TextStyle(
-
-                  fontSize: 22,
-
-                  fontWeight:
-                  FontWeight.bold,
 
                 ),
 
-              ),
 
 
 
-              const SizedBox(
-                height: 15,
-              ),
+                const SizedBox(
+
+                  height: 30,
+
+                ),
 
 
 
-              const CircularProgressIndicator(),
+
+                const Text(
+
+
+                  "CONFIGES",
+
+
+                  style:
+                  TextStyle(
+
+
+                    color:
+                    Colors.white,
+
+
+                    fontSize:
+                    34,
+
+
+                    fontWeight:
+                    FontWeight.w900,
+
+
+                    letterSpacing:
+                    6,
+
+
+                  ),
+
+
+                ),
 
 
 
-            ],
+
+                const SizedBox(
+
+                  height: 5,
+
+                ),
+
+
+
+
+                const Text(
+
+
+                  "ABDELLALI PRO",
+
+
+                  style:
+                  TextStyle(
+
+
+                    color:
+                    Colors.lightBlueAccent,
+
+
+                    fontSize:
+                    24,
+
+
+                    fontWeight:
+                    FontWeight.bold,
+
+
+                    letterSpacing:
+                    3,
+
+
+                  ),
+
+
+                ),
+
+
+
+
+                const SizedBox(
+
+                  height: 20,
+
+                ),
+
+
+
+
+                const Text(
+
+
+                  "FAST • SECURE • CONFIGS",
+
+
+                  style:
+                  TextStyle(
+
+
+                    color:
+                    Colors.white70,
+
+
+                    fontSize:
+                    14,
+
+
+                    letterSpacing:
+                    2,
+
+
+                  ),
+
+
+                ),
+
+
+
+
+                const SizedBox(
+
+                  height: 35,
+
+                ),
+
+
+
+
+                const CircularProgressIndicator(
+
+
+                  color:
+                  Colors.white,
+
+
+                ),
+
+
+
+              ],
+
+
+            ),
 
 
           ),
