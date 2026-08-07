@@ -11,30 +11,49 @@ class FileManagerService {
 
 
 
-  static Future<File> saveConfig(
-      ConfigModel config,
-      String directoryPath
+  Future<File> saveConfigAsABDE(
+      ConfigModel config
       ) async {
 
 
-    final json =
-        jsonEncode(
-          config.toJson(),
-        );
-
-
-    final file =
-        File(
-          "$directoryPath/${config.id}.abde",
-        );
-
-
-    await file.writeAsString(
-        json
+    final directory =
+    Directory(
+      "/storage/emulated/0/CONFIGES_ABDELLALI",
     );
 
 
+    if(!directory.existsSync()){
+
+      await directory.create(
+          recursive:true
+      );
+
+    }
+
+
+
+    final file =
+    File(
+      "${directory.path}/${config.id}.abde",
+    );
+
+
+
+    final data =
+    jsonEncode(
+        config.toJson()
+    );
+
+
+
+    await file.writeAsString(
+        data
+    );
+
+
+
     return file;
+
 
   }
 
@@ -42,29 +61,90 @@ class FileManagerService {
 
 
 
-  static Future<ConfigModel?> loadConfig(
-      File file
+
+
+  Future<bool> isValidABDE(
+      String path
       ) async {
 
 
     try {
 
 
-      final content =
-          await file.readAsString();
+      final file =
+      File(path);
 
 
-      final data =
-          jsonDecode(content);
+
+      if(!await file.exists()){
+
+        return false;
+
+      }
+
+
+
+      final text =
+      await file.readAsString();
+
+
+
+      final json =
+      jsonDecode(text);
+
+
+
+      return json["id"] != null;
+
+
+
+    }catch(e){
+
+
+      return false;
+
+
+    }
+
+
+  }
+
+
+
+
+
+
+
+  Future<ConfigModel?> importABDE(
+      String path
+      ) async {
+
+
+    try{
+
+
+      final file =
+      File(path);
+
+
+
+      final text =
+      await file.readAsString();
+
+
+
+      final json =
+      jsonDecode(text);
 
 
 
       return ConfigModel.fromJson(
-          data
+          json
       );
 
 
-    } catch(e){
+
+    }catch(e){
 
 
       return null;
@@ -79,64 +159,103 @@ class FileManagerService {
 
 
 
-  static Future<void> shareConfig(
-      File file
+
+
+  Future<bool> deleteConfig(
+      String id
       ) async {
 
 
-    await Share.shareXFiles(
-
-      [
-
-        XFile(
-          file.path,
-        )
-
-      ],
-
-      text:
-      "CONFIGES ABDELLALI PRO CONFIG",
-
-    );
+    try{
 
 
-  }
+      final file =
+      File(
+        "/storage/emulated/0/CONFIGES_ABDELLALI/$id.abde",
+      );
 
 
 
+      if(await file.exists()){
 
 
-  static Future<List<File>> getConfigs(
-      String directoryPath
-      ) async {
+        await file.delete();
 
 
-    final directory =
-        Directory(
-            directoryPath
-        );
+      }
 
 
-    if(!directory.existsSync()){
 
-      return [];
+      return true;
+
+
+
+    }catch(e){
+
+
+      return false;
+
 
     }
 
 
+  }
 
-    return directory
-        .listSync()
-        .whereType<File>()
-        .where(
-            (file)=>
-            file.path.endsWith(".abde")
-    )
-        .toList();
+
+
+
+
+
+
+  Future<bool> shareConfig(
+      ConfigModel config
+      ) async {
+
+
+    try{
+
+
+      final file =
+      await saveConfigAsABDE(
+          config
+      );
+
+
+
+      await Share.shareXFiles(
+
+        [
+
+          XFile(
+            file.path,
+          )
+
+        ],
+
+
+        text:
+        "CONFIGES ABDELLALI PRO",
+
+      );
+
+
+
+      return true;
+
+
+
+    }catch(e){
+
+
+      return false;
+
+
+    }
 
 
   }
 
 
 
-}
+}	
+
