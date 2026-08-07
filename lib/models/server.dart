@@ -19,4 +19,29 @@ class Server {
 
   });
 
+
+
+  factory Server.fromJson(Map<String, dynamic> json) {
+
+
+    return Server(
+
+      name: json["name"] ?? "",
+
+      country: json["country"] ?? "",
+
+      type: json["type"] ?? "",
+
+      host: json["host"] ?? "",
+
+      ping: json["ping"] ?? 0,
+
+      online: json["online"] ?? false,
+
+    );
+
+
+  }
+
+
 }
