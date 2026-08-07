@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'services/server_service.dart';
-import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 
 
-Future<void> main() async {
-
+void main() {
 
   WidgetsFlutterBinding.ensureInitialized();
-
-
-  await ServerService.loadServers();
-
 
   runApp(
     const ConfigesApp(),
   );
-
 
 }
 
@@ -36,24 +29,32 @@ class ConfigesApp extends StatelessWidget {
 
     return MaterialApp(
 
+
       debugShowCheckedModeBanner: false,
 
 
       title: "CONFIGES ABDELLALI PRO",
 
 
+
       theme: ThemeData(
+
 
         brightness: Brightness.dark,
 
+
         colorSchemeSeed: Colors.blue,
 
+
         useMaterial3: true,
+
 
       ),
 
 
-      home: const HomeScreen(),
+
+      home: const SplashScreen(),
+
 
 
     );
