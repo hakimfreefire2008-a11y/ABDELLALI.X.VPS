@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/server_service.dart';
+
 
 class V2RayScreen extends StatelessWidget {
 
@@ -8,46 +10,75 @@ class V2RayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
+    final servers = ServerService.servers
+        .where((s) =>
+            s.type == "VLESS" ||
+            s.type == "VMESS" ||
+            s.type == "TROJAN")
+        .toList();
+
+
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text("V2Ray Configs"),
+        title: const Text("V2Ray Servers"),
       ),
 
 
-      body: ListView(
+      body: ListView.builder(
 
         padding: const EdgeInsets.all(16),
 
-        children: const [
+        itemCount: servers.length,
 
-          Card(
+
+        itemBuilder: (context,index){
+
+
+          final server = servers[index];
+
+
+          return Card(
+
             child: ListTile(
-              leading: Icon(Icons.security),
-              title: Text("VLESS"),
-              subtitle: Text("VLESS Configurations"),
+
+              leading: Text(
+                server.country,
+                style: const TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+
+
+              title: Text(
+                server.name,
+              ),
+
+
+              subtitle: Text(
+                "${server.type}\n${server.host}\nPing: ${server.ping} ms",
+              ),
+
+
+              trailing: Icon(
+
+                server.online
+                    ? Icons.wifi
+                    : Icons.wifi_off,
+
+                color: server.online
+                    ? Colors.green
+                    : Colors.red,
+
+              ),
+
             ),
-          ),
+
+          );
 
 
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.security),
-              title: Text("VMESS"),
-              subtitle: Text("VMESS Configurations"),
-            ),
-          ),
-
-
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.security),
-              title: Text("TROJAN"),
-              subtitle: Text("TROJAN Configurations"),
-            ),
-          ),
-
-        ],
+        },
 
       ),
 
